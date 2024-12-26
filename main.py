@@ -9,13 +9,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.alert import Alert
-
 import time
-
-
-
 # edge_options.add_argument("--disable-notifications")
-
 # edge_options.page_load_strategy = 'eager'
 
 class InternetSpeedTwitterBot:
@@ -38,39 +33,24 @@ class InternetSpeedTwitterBot:
     print(download, upload)
     pass
 
+  
   def get_internet_speed_(self):
     self.driver.get("https://www.speedtest.net/")
     allow = self.driver.find_element(By.XPATH, value="/html/body/div[5]/div[2]/div/div/div[2]/div/div/button[2]").click() 
     time.sleep(3)
     go = self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[1]/a").click()
-    
     time.sleep(30)
-   
-    # try:
-    #   alert = self.driver.switch_to.alert
-    #   alert.accept()
-    # except:
-    #   print('no alert found')
-
     try:
       wait = WebDriverWait(self.driver, 10)
       dismiss_button = wait.until(
           EC.element_to_be_clickable((By.XPATH, "/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[8]/div/a"))
       )
-      # Click the dismiss button
       dismiss_button.click()
       print("Modal dismissed.")
     except Exception as e:
       print(f"Failed to dismiss modal: {e}")
 
-    # try:
-    #   self.driver.switch_to.active_element.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[8]/div/a").click()
-    # except:
-    #   print('switch to failed')
-
-
-    # download = self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[1]/div/div[2]/span").text
-    # upload = self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[2]/div/div[2]/span").text
+    
     yield self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[1]/div/div[2]/span").text
     yield self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[2]/div/div[2]/span").text
     # print(f'download: {x_}, upload: {y_}')
