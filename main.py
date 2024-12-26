@@ -71,12 +71,12 @@ class InternetSpeedTwitterBot:
 
     # download = self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[1]/div/div[2]/span").text
     # upload = self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[2]/div/div[2]/span").text
-    x_ = self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[1]/div/div[2]/span").text
-    y_ = self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[2]/div/div[2]/span").text
-    print(f'download: {x_}, upload: {y_}')
-    return x_, y_
+    yield self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[1]/div/div[2]/span").text
+    yield self.driver.find_element(By.XPATH, value="/html/body/div[3]/div[1]/div[3]/div/div/div/div[2]/div[3]/div[3]/div/div[3]/div/div/div[2]/div[1]/div[2]/div/div[2]/span").text
+    # print(f'download: {x_}, upload: {y_}')
+    # return download, upload
   
-  def tweet_at_provider(self):
+  def tweet_at_provider(self, down, up):
     self.driver.get("https://x.com/")
     time.sleep(3)
 
@@ -87,13 +87,8 @@ class InternetSpeedTwitterBot:
     next = self.driver.find_element(By.XPATH, value="/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/button[2]").click()
     time.sleep(6)
    
-
-    try:
-      WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[4]/label/div/div[2]/div/input'))).send_keys("SzymonB1401")
-    except:
-      username_redirect = self.driver.find_element(By.TAG_NAME, value="input").send_keys("SzymonB1401")
-    finally:
-      next = self.driver.find_element(By.XPATH, value="/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/button").click()
+    username_redirect = self.driver.find_element(By.TAG_NAME, value="input").send_keys("SzymonB1401")
+    next = self.driver.find_element(By.XPATH, value="/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/button").click()
   
 
     time.sleep(5)
@@ -101,8 +96,18 @@ class InternetSpeedTwitterBot:
     time.sleep(3)
     log_in = self.driver.find_element(By.XPATH, value="/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/button").click()
  
+    time.sleep(3)
+    enter_post = self.driver.find_element(By.XPATH, value="/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div[2]/div[1]/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div/div/div[2]/div/div/div/div").send_keys(f"download: {down}, up: {up}")
+    time.sleep(2)
+    post = self.driver.find_element(By.XPATH, value="/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div[2]/div[1]/div/div/div/div[2]/div[2]/div[2]/div/div/div/button").click()
+    time.sleep(2)
+    try:
+      got_it = self.driver.find_element(By.XPATH, value="/html/body/div[1]/div/div/div[1]/div[3]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[3]/button").click()
+    except:
+      print('got it not found')
+
 
 bot = InternetSpeedTwitterBot()
-bot.get_internet_speed_()
-bot.tweet_at_provider()
+gen = bot.get_internet_speed_()
+bot.tweet_at_provider(next(gen), next(gen))
 time.sleep(5)
